@@ -105,8 +105,8 @@ dash
   border-top: 1px solid #dbdbdb;
 }
 
-#game #board .column {
-  height: 50%;
+#dash #control .column {
+  padding: 0.5rem;
 }
 
 #dash #control .button, #dash #control .input {
