@@ -1,96 +1,96 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!-- metadata -->
-    <title>Simon Game Widget</title>
-    <meta name="description" content="Free Code Camp Project - Simon Game Widget">
-    <meta name="author" content="Tony Ko">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- favicon -->
-    <!-- <link rel="icon" href=".png"> -->
-    <!-- external -->
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:100,300|Roboto+Condensed:100,300">
-    <!-- libraries -->
-    <link rel="stylesheet" type="text/css" href="static/css/bulma-0.3.1.css">
-    <link rel="stylesheet" type="text/css" href="static/css/font-awesome-4.7.0.min.css">
-    <link rel="stylesheet" type="text/css" href="static/css/animate-2017-01-19.css">
-    <script type="text/javascript" src="static/js/jquery-3.1.1.min.js"></script>
-    <!-- widget -->
-    <link rel="stylesheet" type="text/css" href="static/css/index.css">
-    <script type="text/javascript" src="static/js/index.js"></script>
-    <!-- end -->
-  </head>
-  <body>
+<head>
+  <!-- metadata -->
+  <title>Simon Game Widget</title>
+  <meta name="description" content="Free Code Camp Project - Simon Game Widget">
+  <meta name="author" content="Tony Ko">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- favicon -->
+  <!-- <link rel="icon" href=".png"> -->
+  <!-- external -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:100,300|Roboto+Condensed:100,300">
+  <!-- libraries -->
+  <link rel="stylesheet" type="text/css" href="static/css/bulma-0.3.1.css">
+  <link rel="stylesheet" type="text/css" href="static/css/font-awesome-4.7.0.min.css">
+  <link rel="stylesheet" type="text/css" href="static/css/animate-2017-01-19.css">
+  <script type="text/javascript" src="static/js/jquery-3.1.1.min.js"></script>
+  <!-- widget -->
+  <link rel="stylesheet" type="text/css" href="static/css/index.css">
+  <script type="text/javascript" src="static/js/index.js"></script>
+  <!-- end -->
+</head>
+<body>
 
-    <!-- widget container -->
-    <section id="main" class="section is-stretch">
-      <div class="container is-stretch">
-        <div class="columns is-mobile is-stretch is-centered is-gapless">
-          <div id="app" class="column is-12">
-            <div id="app-card" class="card transition">
-              <header id="title" class="card-header">
+  <!-- widget container -->
+  <section id="main" class="section is-stretch transition">
+    <div class="container is-stretch">
+      <div class="columns is-mobile is-stretch is-centered is-gapless">
+        <div id="app" class="column is-12">
+          <div id="app-card" class="card">
+            <header id="title" class="card-header">
 
-                <p class="card-header-title">Simon Game Widget</p>
-                <a class="card-header-icon">
-                  <i class="fa fa-bomb"></i>
-                </a>
+              <p class="card-header-title">Simon Game Widget</p>
+              <a class="card-header-icon">
+                <i class="fa fa-bomb"></i>
+              </a>
 
-              </header>
-              <div id="game" class="card-content">
+            </header>
+            <div id="game" class="card-content">
 
-                <div id="board" class="is-stretch is-centered">
-                  <div class="columns is-multiline is-mobile is-stretch">
-                    <div class="column is-6">
-                      <a id="0" class="button is-success is-disabled"><img src="static/img/key.svg" alt=""></a>
-                    </div>
-                    <div class="column is-6">
-                      <a id="1" class="button is-danger is-disabled"><img src="static/img/key.svg" alt="" style="transform: rotate(90deg)"></a>
-                    </div>
-                    <div class="column is-6">
-                      <a id="2" class="button is-warning is-disabled"><img src="static/img/key.svg" alt="" style="transform: rotate(-90deg)"></a>
-                    </div>
-                    <div class="column is-6">
-                      <a id="3" class="button is-info is-disabled"><img src="static/img/key.svg" alt="" style="transform: rotate(180deg)"></a>
-                    </div>
+              <div id="board" class="is-stretch is-centered">
+                <div class="columns is-multiline is-mobile is-stretch">
+                  <div class="column is-6">
+                    <a id="0" class="button is-success is-disabled"><img src="static/img/key.svg" alt=""></a>
+                  </div>
+                  <div class="column is-6">
+                    <a id="1" class="button is-danger is-disabled"><img src="static/img/key.svg" alt="" style="transform: rotate(90deg)"></a>
+                  </div>
+                  <div class="column is-6">
+                    <a id="2" class="button is-warning is-disabled"><img src="static/img/key.svg" alt="" style="transform: rotate(-90deg)"></a>
+                  </div>
+                  <div class="column is-6">
+                    <a id="3" class="button is-info is-disabled"><img src="static/img/key.svg" alt="" style="transform: rotate(180deg)"></a>
                   </div>
                 </div>
-
               </div>
-              <div id="dash" class="card-content">
 
-                <div id="control" class="is-stretch is-centered tiny">
-                  <div class="columns is-multiline is-mobile is-stretch">
-                    <div class="column is-6">
-                      <a id="power" class="button is-danger">
-                        <i class="fa fa-power-off"></i>&nbsp;Power
-                      </a>
-                    </div>
-                    <div class="column is-6">
-                      <a id="start" class="button is-success is-disabled">
-                        <i class="fa fa-play-circle"></i>&nbsp;Start
-                      </a>
-                    </div>
-                    <div class="column is-6">
-                      <input class="input is-success has-text-centered" type="text" placeholder="Counter" value="00" readonly>
-                    </div>
-                    <div class="column is-6">
-                      <a id="strict" class="button is-warning is-disabled">
-                        <i class="fa fa-exclamation-circle "></i>&nbsp;Strict
-                      </a>
-                    </div>
+            </div>
+            <div id="dash" class="card-content">
+
+              <div id="control" class="is-stretch is-centered tiny">
+                <div class="columns is-multiline is-mobile is-stretch">
+                  <div class="column is-6">
+                    <a id="power" class="button is-danger">
+                      <i class="fa fa-power-off"></i>&nbsp;Power
+                    </a>
+                  </div>
+                  <div class="column is-6">
+                    <a id="strict" class="button is-warning is-disabled">
+                      <i class="fa fa-exclamation-circle "></i>&nbsp;Strict
+                    </a>
+                  </div>
+                  <div class="column is-6">
+                    <a id="start" class="button is-success is-disabled">
+                      <i class="fa fa-play-circle"></i>&nbsp;Start
+                    </a>
+                  </div>
+                  <div class="column is-6">
+                    <input id="counter" class="input is-success has-text-centered" type="text" value="" readonly>
                   </div>
                 </div>
-
               </div>
+
             </div>
-            <div class="card">
-              <footer class="card-footer"> <a class="card-footer-item" href="https://htko.ca/project/code/fcc/tic-tac-toe-widget/README/">Portfolio</a> <a class="card-footer-item" href="https://github.com/htko89/fcc-tic-tac-toe-widget">GitHub</a> </footer>
-            </div>
+          </div>
+          <div class="card">
+            <footer class="card-footer"> <a class="card-footer-item" href="https://htko.ca/project/code/fcc/tic-tac-toe-widget/README/">Portfolio</a> <a class="card-footer-item" href="https://github.com/htko89/fcc-tic-tac-toe-widget">GitHub</a> </footer>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-  </body>
+</body>
 </html>
