@@ -16,26 +16,21 @@ var ui = {
   "power": "#dash #control #power",
   "strict": "#dash #control #strict",
   "start": "#dash #control #start",
-  "counter": "#dash #control #counter"
+  "counter": "#dash #control #counter",
+  "game": "#game #board #"
 }
 
 var cfg = {
   "power": false,
   "strict": false,
-  "start": false,
-  "counter": 0
+  "start": false
 }
 
-var game = {
-  "seq": [],
-  "user": [],
-  "index": 0,
-  "timeout": 0
-}
+var game = new cycle();
 
 /*****************************************************************************************************
 *****************************************************************************************************
-ui & States
+ui & states
 *****************************************************************************************************
 *****************************************************************************************************/
 
@@ -45,105 +40,110 @@ $( document ).ready( function() {
     cfg.power = ( cfg.power ? false : true );
     cfg.strict = false;
     cfg.started = false;
-    cfg.counter = 0;
     renderUI();
   } );
 
   $( ui.strict ).click( function() {
     cfg.strict = ( cfg.strict ? false : true );
     renderUI();
-    console.log( cfg, game );
   } );
 
   $( ui.start ).click( function() {
     cfg.start = ( cfg.start ? false : true );
-    game.seq = [];
-    game.user = [];
-    game.index = 0;
-    game.timeout = 0;
     renderUI();
-    nextCycle();
+    if ( cfg.start ) {
+      game = new cycle();
+      game.next( true );
+    }
   } );
 
-  function renderUI() {
-    if ( cfg.power ) {
-      $( ui.all ).removeClass( "is-disabled" );
-      if ( cfg.strict ) {
-        $( ui.strict ).addClass( "is-focused" );
-      } else {
-        $( ui.strict ).removeClass( "is-focused" );
-      }
-      if ( cfg.start ) {
-        $( ui.start ).addClass( "is-focused" );
-        $( ui.counter ).val( twoDigit( cfg.counter ) );
-      } else {
-        $( ui.start ).removeClass( "is-focused" );
-        $( ui.counter ).val( "--" );
-      }
-    } else {
-      $( ui.all ).addClass( "is-disabled" );
-      $( ui.strict ).removeClass( "is-focused" );
-      $( ui.start ).removeClass( "is-focused" );
-      $( ui.counter ).val( "" );
-    }
-  }
-
-  /*****************************************************************************************************
-  *****************************************************************************************************
-  game
-  *****************************************************************************************************
-  *****************************************************************************************************/
-
-  function nextCycle() {
-    if ( cfg.power && cfg.start ) {
-      var rand = getRand();
-      cfg.counter++;
-      game.seq.push( rand );
-      game.index = 0;
-      renderUI();
-      setTimeout( seqCycle, 1000 );
-    }
-  }
-
-  function addSeq() {
-    var rand = getRand();
-    game.seq.push( rand );
-
-  }
-  function seqCycle() {
-    if ( cfg.power && cfg.start ) {
-      if ( game.index === cfg.counter ) {
-        userCycle();
-      } else {
-        game.index++;
-        playKey( game.seq[ game.index ] );
-        console.log( rand, game.index, cfg.counter )
-        setTimeout( seqCycle, 1000 );
-      }
-    }
-  }
-
-  function userCycle() {
-    console.log( cfg, game );
-    nextCycle();
-  }
-
-  /*****************************************************************************************************
-  *****************************************************************************************************
-  misc
-  *****************************************************************************************************
-  *****************************************************************************************************/
-
-  function twoDigit( str ) {
-    return ( "0" + str ).slice( -2 );
-  }
-
-  function getRand() { // 0, 1, 2, or 3
-    return Math.floor( Math.random() * 4 );
-  }
-
-  function playKey( key ) {
-    sound[ key ].play();
-  }
-
 } );
+
+function renderUI() {
+  if ( cfg.power ) {
+    $( ui.all ).removeClass( "is-disabled" );
+    if ( cfg.strict ) {
+      $( ui.strict ).addClass( "is-focused" );
+    } else {
+      $( ui.strict ).removeClass( "is-focused" );
+    }
+    if ( cfg.start ) {
+      $( ui.start ).addClass( "is-focused" );
+      $( ui.counter ).val( twoDigit( game.getCounter() ) );
+    } else {
+      $( ui.start ).removeClass( "is-focused" );
+      $( ui.counter ).val( "--" );
+    }
+  } else {
+    $( ui.all ).addClass( "is-disabled" );
+    $( ui.strict ).removeClass( "is-focused" );
+    $( ui.start ).removeClass( "is-focused" );
+    $( ui.counter ).val( "" );
+  }
+}
+
+/*****************************************************************************************************
+*****************************************************************************************************
+game
+*****************************************************************************************************
+*****************************************************************************************************/
+
+function cycle() {
+  var parent = this;
+  var seq = [];
+  var user = [];
+  var counter = 0;
+  var index = 0;
+  var timeout = 0;
+  this.getCounter = function() {
+    return counter;
+  };
+  this.next = function( reset ) { // next cycle
+    if ( cfg.power && cfg.start ) {
+      console.log( "next" );
+      counter = ( reset ? 1 : counter + 1 );
+      index = 0;
+      seq.push( getRand() );
+      renderUI();
+      setTimeout( parent.play, 1000 );
+    }
+  };
+  this.play = function() { // play cycle
+    if ( cfg.power && cfg.start ) {
+      if ( index === counter ) {
+        index = 0;
+        setTimeout( parent.user, 1000 );
+      } else {
+        console.log( "play" );
+        sound[ seq[ index ] ].play();
+        index++;
+        setTimeout( parent.play, 1000 );
+      }
+    }
+  };
+  this.user = function( key ) { // user input
+    if ( cfg.power && cfg.start ) {
+      console.log( "user" );
+      parent.next();
+    }
+  };
+  this.end = function( inCounter ) { // timer cooldown
+    if ( cfg.power && cfg.start ) {
+      console.log( "end" );
+    }
+  }
+}
+
+/*****************************************************************************************************
+*****************************************************************************************************
+misc
+*****************************************************************************************************
+*****************************************************************************************************/
+
+function twoDigit( str ) {
+  return ( "0" + str ).slice( -2 );
+}
+
+function getRand() { // 0, 1, 2, or 3
+  return Math.floor( Math.random() * 4 );
+}
