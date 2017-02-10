@@ -30,7 +30,7 @@ var game = new cycle();
 
 /*****************************************************************************************************
 *****************************************************************************************************
-ui & states
+inputs & states
 *****************************************************************************************************
 *****************************************************************************************************/
 
@@ -58,29 +58,6 @@ $( document ).ready( function() {
   } );
 
 } );
-
-function renderUI() {
-  if ( cfg.power ) {
-    $( ui.all ).removeClass( "is-disabled" );
-    if ( cfg.strict ) {
-      $( ui.strict ).addClass( "is-focused" );
-    } else {
-      $( ui.strict ).removeClass( "is-focused" );
-    }
-    if ( cfg.start ) {
-      $( ui.start ).addClass( "is-focused" );
-      $( ui.counter ).val( twoDigit( game.getCounter() ) );
-    } else {
-      $( ui.start ).removeClass( "is-focused" );
-      $( ui.counter ).val( "--" );
-    }
-  } else {
-    $( ui.all ).addClass( "is-disabled" );
-    $( ui.strict ).removeClass( "is-focused" );
-    $( ui.start ).removeClass( "is-focused" );
-    $( ui.counter ).val( "" );
-  }
-}
 
 /*****************************************************************************************************
 *****************************************************************************************************
@@ -131,6 +108,35 @@ function cycle() {
     if ( cfg.power && cfg.start ) {
       console.log( "end" );
     }
+  }
+}
+
+/*****************************************************************************************************
+*****************************************************************************************************
+ui
+*****************************************************************************************************
+*****************************************************************************************************/
+
+function renderUI() {
+  if ( cfg.power ) {
+    $( ui.all ).removeClass( "is-disabled" );
+    if ( cfg.strict ) {
+      $( ui.strict ).addClass( "is-focused" );
+    } else {
+      $( ui.strict ).removeClass( "is-focused" );
+    }
+    if ( cfg.start ) {
+      $( ui.start ).addClass( "is-focused" );
+      $( ui.counter ).val( twoDigit( game.getCounter() ) );
+    } else {
+      $( ui.start ).removeClass( "is-focused" );
+      $( ui.counter ).val( "--" );
+    }
+  } else {
+    $( ui.all ).addClass( "is-disabled" );
+    $( ui.strict ).removeClass( "is-focused" );
+    $( ui.start ).removeClass( "is-focused" );
+    $( ui.counter ).val( "" );
   }
 }
 
