@@ -32,12 +32,20 @@ body, html {
   height: 100%;
 }
 
-.button.is-warning.is-focused {
+.button.is-success.is-focused, .button.is-success:active {
+  box-shadow: 0 0 0.5em rgba(0, 255, 0, 0.8);
+}
+
+.button.is-warning.is-focused, .button.is-warning:active {
   box-shadow: 0 0 0.5em rgba(255, 0, 0, 0.8);
 }
 
-.button.is-success.is-focused {
-  box-shadow: 0 0 0.5em rgba(0, 255, 0, 0.8);
+.button.is-danger.is-focused, .button.is-danger:active {
+  box-shadow: 0 0 0.5em rgba(255, 0, 0, 0.8);
+}
+
+.button.is-info.is-focused, .button.is-info:active  {
+  box-shadow: 0 0 0.5em rgba(0, 0, 255, 0.8);
 }
 
 .card {

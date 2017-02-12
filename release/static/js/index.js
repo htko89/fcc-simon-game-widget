@@ -17,13 +17,16 @@ var ui = {
   "strict": "#dash #control #strict",
   "start": "#dash #control #start",
   "counter": "#dash #control #counter",
-  "game": "#game #board #"
+  "game": "#game #board ",
+  "disabled": "is-disabled",
+  "pressed": "is-focused"
 }
 
 var cfg = {
   "power": false,
   "strict": false,
-  "start": false
+  "start": false,
+  "user": false
 }
 
 var game = new cycle();
@@ -39,7 +42,8 @@ $( document ).ready( function() {
   $( ui.power ).click( function() {
     cfg.power = ( cfg.power ? false : true );
     cfg.strict = false;
-    cfg.started = false;
+    cfg.start = false;
+    cfg.user = false;
     renderUI();
   } );
 
@@ -50,11 +54,16 @@ $( document ).ready( function() {
 
   $( ui.start ).click( function() {
     cfg.start = ( cfg.start ? false : true );
-    renderUI();
+    cfg.user = false;
     if ( cfg.start ) {
       game = new cycle();
-      game.next( true );
+      game.start();
     }
+    renderUI();
+  } );
+
+  $( ui.game + ".button" ).click( function() {
+    game.user( parseInt( this.id, 10 ) );
   } );
 
 } );
@@ -67,46 +76,89 @@ game
 
 function cycle() {
   var parent = this;
+  var user = false;
   var seq = [];
-  var user = [];
-  var counter = 0;
   var index = 0;
-  var timeout = 0;
+  var timer = 0;
+  var timeWait = 1000;
   this.getCounter = function() {
-    return counter;
+    return seq.length;
   };
-  this.next = function( reset ) { // next cycle
+  this.start = function() { // start animation
+    playCounter( 500, 0 );
+    playCounter( 500, 1000 );
+    setTimeout( parent.next, timeWait );
+  };
+  this.next = function() { // next cycle
     if ( cfg.power && cfg.start ) {
-      console.log( "next" );
-      counter = ( reset ? 1 : counter + 1 );
-      index = 0;
-      seq.push( getRand() );
-      renderUI();
-      setTimeout( parent.play, 1000 );
+      if ( seq.length < 20 ) {
+        console.log( "next" );
+        index = 0;
+        var key = getRand()
+        seq.push( key );
+        renderUI();
+        setTimeout( parent.play, timeWait );
+      } else {
+        setTimeout( parent.win, timeWait );
+      }
     }
   };
   this.play = function() { // play cycle
     if ( cfg.power && cfg.start ) {
-      if ( index === counter ) {
-        index = 0;
-        setTimeout( parent.user, 1000 );
-      } else {
+      if ( index !== seq.length ) {
         console.log( "play" );
-        sound[ seq[ index ] ].play();
+        playKey( seq[ index ], 500, 0 );
         index++;
-        setTimeout( parent.play, 1000 );
+        setTimeout( parent.play, timeWait );
+      } else {
+        index = 0;
+        cfg.user = true;
+        timer = setTimeout( parent.lose, 1000 * seq.length + timeWait );
       }
     }
   };
   this.user = function( key ) { // user input
-    if ( cfg.power && cfg.start ) {
-      console.log( "user" );
-      parent.next();
+    if ( cfg.power && cfg.start && cfg.user ) {
+      if ( key === seq[ index ] ) {
+        console.log( "user", key );
+        playKey( key, 500, 0 );
+        index++;
+        if ( index === seq.length ) {
+          cfg.user = false;
+          setTimeout( parent.next, timeWait );
+          clearTimeout( timer );
+        }
+      } else {
+        cfg.user = false;
+        parent.lose();
+        clearTimeout( timer );
+      }
     }
   };
-  this.end = function( inCounter ) { // timer cooldown
+  this.win = function() {
     if ( cfg.power && cfg.start ) {
-      console.log( "end" );
+      console.log( "win" );
+      playKey( 3, 100, 0 );
+      playKey( 2, 100, 100 );
+      playKey( 1, 100, 200 );
+      playKey( 0, 100, 300 );
+    }
+  }
+  this.lose = function() {
+    if ( cfg.power && cfg.start ) {
+      cfg.user = false;
+      console.log( "lose" );
+      playKey( 0, 100, 0 );
+      playKey( 1, 100, 100 );
+      playKey( 2, 100, 200 );
+      playKey( 3, 100, 300 );
+      if ( !cfg.strict ) {
+        index = 0;
+        setTimeout( parent.play, timeWait );
+      } else {
+        cfg.start = false;
+        renderUI();
+      }
     }
   }
 }
@@ -119,25 +171,44 @@ ui
 
 function renderUI() {
   if ( cfg.power ) {
-    $( ui.all ).removeClass( "is-disabled" );
+    $( ui.all ).removeClass( ui.disabled );
     if ( cfg.strict ) {
-      $( ui.strict ).addClass( "is-focused" );
+      $( ui.strict ).addClass( ui.pressed );
     } else {
-      $( ui.strict ).removeClass( "is-focused" );
+      $( ui.strict ).removeClass( ui.pressed );
     }
     if ( cfg.start ) {
-      $( ui.start ).addClass( "is-focused" );
+      $( ui.start ).addClass( ui.pressed );
       $( ui.counter ).val( twoDigit( game.getCounter() ) );
     } else {
-      $( ui.start ).removeClass( "is-focused" );
+      $( ui.start ).removeClass( ui.pressed );
       $( ui.counter ).val( "--" );
     }
   } else {
-    $( ui.all ).addClass( "is-disabled" );
-    $( ui.strict ).removeClass( "is-focused" );
-    $( ui.start ).removeClass( "is-focused" );
+    $( ui.all ).addClass( ui.disabled );
+    $( ui.strict ).removeClass( ui.pressed );
+    $( ui.start ).removeClass( ui.pressed );
     $( ui.counter ).val( "" );
   }
+}
+
+function playKey( key, time, timeStart ) {
+  setTimeout( function() {
+    sound[ key ].play();
+    $( ui.game + "#" + key ).addClass( ui.pressed );
+    setTimeout( function() {
+      $( ui.game + "#" + key ).removeClass( ui.pressed );
+    }, time );
+  }, timeStart );
+}
+
+function playCounter( time, timeStart ) {
+  setTimeout( function() {
+    $( ui.counter ).val( "" );
+    setTimeout( function() {
+      $( ui.counter ).val( "--" );
+    }, time );
+  }, timeStart );
 }
 
 /*****************************************************************************************************
