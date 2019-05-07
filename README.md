@@ -1,22 +1,3 @@
----
-layout: _pages/post
-title: Simon Game Widget
-date: '2017-02-11'
-link: 'https://htkoca.github.io/fcc-simon-game-widget/release/'
-code: 'https://github.com/htkoca/fcc-simon-game-widget'
-program: 01 - Front End Development Certification
-course: 12 - Advanced Front End Development Projects
-project: 04 - Build a Simon Game
-categories:
-  - code
-tags:
-  - bulma
-  - jquery
-cover: cover.jpg
-images:
-  - mockup-mobile.jpg
-  - screenshot-6+.jpg
----
 # Student Project - Free Code Camp
 Build an app that is functionally similar to this: https://codepen.io/FreeCodeCamp/full/obYBjE.
 
